@@ -1,0 +1,59 @@
+services:
+    frontend:
+        image: tuffyduck/gantt-frontend:latest
+        restart: unless-stopped
+        depends_on:
+            - backend
+        environment:
+            - VITE_API_URL=http://141.98.189.35:5000
+        networks:
+            - app-network
+        ports:
+            - "80:5173"
+
+    backend:
+        image: brvindvnce/gantt-chart-backend:latest
+        restart: unless-stopped
+        depends_on:
+            postgres:
+                condition: service_healthy
+        ports:
+            - "5000:8080"
+        networks:
+            - app-network
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - DB_NAME=${DB_NAME}
+            - DB_USER=${DB_USER}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - DB_HOST=${DB_HOST}
+            - DB_PORT=${DB_PORT}
+            - ConnectionStrings__DefaultConnection=Host=postgres;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+            - ASPNETCORE_CORS_ORIGINS=http://141.98.189.35,http://localhost:4173,http://localhost:5173
+    postgres:
+        image: postgres:15-alpine
+        environment:
+            POSTGRES_DB: ${DB_NAME}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        restart: unless-stopped
+        networks:
+            - app-network
+        #ports:
+        #    - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
