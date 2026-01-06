@@ -5,7 +5,7 @@ services:
         depends_on:
             - backend
         environment:
-            - VITE_API_URL=http://141.98.189.35:5000
+             - VITE_API_URL=http://158.160.8.109:5000
         networks:
             - app-network
         ports:
