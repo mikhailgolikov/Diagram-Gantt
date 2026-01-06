@@ -3,5 +3,5 @@ test-job:
   script:
     - echo "Раннер работает!"
     - hostname
-    - whoami
+    - whoami 
     - date 
