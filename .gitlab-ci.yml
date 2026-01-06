@@ -3,7 +3,7 @@ stages:
   - deploy
 
 deploy-project:
-  stage: deploy
+  stage: deploy 
   # Укажи здесь ТВОЙ тег, который ты видел в настройках GitLab (например, belingem-shell)
   tags:
     - bellinghem
