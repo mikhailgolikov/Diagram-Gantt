@@ -4,4 +4,4 @@ test-job:
     - echo "Раннер работает!"
     - hostname
     - whoami
-    - date
+    - date 
