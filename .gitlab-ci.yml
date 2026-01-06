@@ -6,7 +6,7 @@ deploy-project:
   stage: deploy
   # Укажи здесь ТВОЙ тег, который ты видел в настройках GitLab (например, belingem-shell)
   tags:
-    - belingem
+    - bellinghem
   script:
     - echo "Начинаем деплой проекта..."
     
