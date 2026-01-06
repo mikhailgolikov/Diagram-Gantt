@@ -1,7 +1,24 @@
+stages:
+  - build
+  -test
+
+build-job:
+  stage: build
+  tags:
+    - bellinghem
+  script:
+    - mkdir output
+    - echo "Это скомпилированный файл или билд проекта" > output/result.txt
+    - date >> output/result.txt
+  artifacts:
+    paths:
+      - output/
+    expire_in: 1 week
+    name: "build-artifact-$CI_COMMIT_SHORT_SHA"
 test-job:
   stage: test
+  tags:
+    - bellinghem
   script:
-    - echo "Раннер работает!"
-    - hostname
-    - whoami 
-    - date 
+    - echo "Проверяем наличие артефакта из предыдущей стадии:"
+    - cat output/result.txt
