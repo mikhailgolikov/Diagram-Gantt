@@ -1,24 +1,22 @@
+# Список стадий. Сейчас нам нужен только деплой.
 stages:
-  - build
-  -test
+  - deploy
 
-build-job:
-  stage: build
+deploy-project:
+  stage: deploy
+  # Укажи здесь ТВОЙ тег, который ты видел в настройках GitLab (например, belingem-shell)
   tags:
-    - bellinghem
+    - belingem
   script:
-    - mkdir output
-    - echo "Это скомпилированный файл или билд проекта" > output/result.txt
-    - date >> output/result.txt
-  artifacts:
-    paths:
-      - output/
-    expire_in: 1 week
-    name: "build-artifact-$CI_COMMIT_SHORT_SHA"
-test-job:
-  stage: test
-  tags:
-    - bellinghem
-  script:
-    - echo "Проверяем наличие артефакта из предыдущей стадии:"
-    - cat output/result.txt
+    - echo "Начинаем деплой проекта..."
+    
+    # 1. Проверяем, что файлы на месте (для отладки в логах)
+    - ls -la
+    
+    # 2. Собираем и запускаем контейнеры. 
+    # -d — в фоновом режиме
+    # --build — пересоберет образы, если ты изменил код (JS, Python и т.д.)
+    - docker compose up -d --build
+    
+    # 3. Выводим список запущенных контейнеров, чтобы убедиться в успехе
+    - docker ps
