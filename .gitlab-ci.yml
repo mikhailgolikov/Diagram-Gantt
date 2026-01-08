@@ -28,6 +28,9 @@ deploy_job:
   stage: deploy 
   tags:
     - bellinghem
+  environment:
+    name: production 
+    url: http://158.160.8.109
   script:
     - echo "Помчали деплой..."
     - docker compose up -d --build
