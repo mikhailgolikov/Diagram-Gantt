@@ -1,22 +1,31 @@
-# Список стадий. Сейчас нам нужен только деплой.
 stages:
+  - build
   - deploy
 
-deploy-project:
-  stage: deploy 
-  # Укажи здесь ТВОЙ тег, который ты видел в настройках GitLab (например, belingem-shell)
+build_job:
+  stage: build
   tags:
     - bellinghem
   script:
-    - echo "Начинаем деплой проекта..."
-    
-    # 1. Проверяем, что файлы на месте (для отладки в логах)
-    - ls -la
-    
-    # 2. Собираем и запускаем контейнеры. 
-    # -d — в фоновом режиме
-    # --build — пересоберет образы, если ты изменил код (JS, Python и т.д.)
+    - echo "Фиксаируем версии инструментов сборки"
+    - docker version > versions.txt
+    - docker compose version > versions.txt
+  artifacts:
+    paths:
+      - versions.txt
+      - expire_in: 1 day
+
+
+deploy_job:
+  stage: deploy 
+  tags:
+    - bellinghem
+  script:
+    - echo "Помчали деплой..."
     - docker compose up -d --build
-    
-    # 3. Выводим список запущенных контейнеров, чтобы убедиться в успехе
-    - docker ps
+    - echo "Список запущенных контейнеров:"
+    - docker ps > deploy_data.txt
+  artifacts:
+    paths:
+      - deploy_data.txt
+    when: always
