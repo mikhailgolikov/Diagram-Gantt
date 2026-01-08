@@ -3,6 +3,14 @@ stages:
   - test
   - deploy
 
+.base_template:
+  tags:
+    - bellinghem
+  interruptible: true
+  retry:
+    max: 2
+    when: runner_system_failure
+
 cache:
   key: "$CI_COMMIT_REF_SLUG" 
   paths:
@@ -12,9 +20,8 @@ cache:
     - .npm/ 
 
 build_job:
+  extends: .base_template
   stage: build
-  tags:
-    - bellinghem
   script:
     - echo "Фиксаируем версии инструментов сборки"
     - docker version > versions.txt
@@ -25,18 +32,16 @@ build_job:
     expire_in: 1 day
 
 lint_job:
+  extends: .base_template
   stage: test
-  tags:
-    - bellinghem
   script:
     - echo "Запускаем проверку кода"
     - sleep 5
     - echo "Код в порядке"
 
 deploy_job:
+  extends: .base_template
   stage: deploy 
-  tags:
-    - bellinghem
   needs:
     - job: build_job
     - job: lint_job
