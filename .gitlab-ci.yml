@@ -2,6 +2,14 @@ stages:
   - build
   - deploy
 
+cache:
+  key: "$CI_COMMIT_REF_SLUG" 
+  paths:
+    - frontend/node_modules/
+    - backend/obj/         
+    - backend/bin/
+    - .npm/ 
+
 build_job:
   stage: build
   tags:
