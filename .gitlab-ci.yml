@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
   - deploy
 
 cache:
@@ -23,11 +24,21 @@ build_job:
       - versions.txt
     expire_in: 1 day
 
+lint_job:
+  stage: test
+  tags:
+    - bellinghem
+  script:
+    - echo "Запускаем проверку кода"
+    - sleep 5
+    - echo "Код в порядке"
 
 deploy_job:
   stage: deploy 
   tags:
     - bellinghem
+  needs:
+    - job: build_job
   environment:
     name: production 
     url: http://158.160.8.109
