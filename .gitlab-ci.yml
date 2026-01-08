@@ -39,6 +39,7 @@ deploy_job:
     - bellinghem
   needs:
     - job: build_job
+    - job: lint_job
   environment:
     name: production 
     url: http://158.160.8.109
