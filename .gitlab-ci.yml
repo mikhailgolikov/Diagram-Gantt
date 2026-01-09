@@ -44,14 +44,14 @@ deploy_job:
   extends: .base_template
   stage: deploy 
   needs:
-    - job: build_jobbbb
+    - job: build_job
     - job: lint_job
   environment:
     name: production 
     url: http://158.160.8.109
   script:
     - echo "Помчали деплой..."
-    - docker compose up -d --build
+    - docker compose up -d --build---
     - echo "Список запущенных контейнеров:"
     - echo "Деплой производится на сервер -  $SERVER_IP"
     - echo "Проверка наличия пароля БД - $DB_PASSWORD"
