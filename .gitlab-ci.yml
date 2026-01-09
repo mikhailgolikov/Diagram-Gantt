@@ -44,7 +44,7 @@ deploy_job:
   extends: .base_template
   stage: deploy 
   needs:
-    - job: build_job
+    - job: build_jobbbb
     - job: lint_job
   environment:
     name: production 
@@ -71,7 +71,7 @@ message_good:
     - when: on_success
   script:
     - |
-      MSG="💍 *АААААААА* Пайплайн проекта ${CI_PROJECT_NAME}успеХ. %0A📊 Статус: ${CI_JOB_STATUS} %0A📦 Версия: ${CI_COMMIT_SHORT_SHA}"
+      MSG="*АААААААА* Пайплайн проекта ${CI_PROJECT_NAME}успеХ. %0A Статус: ${CI_JOB_STATUS} %0A Версия: ${CI_COMMIT_SHORT_SHA}"
       curl --fail -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
         -d "chat_id=${TELEGRAM_CHAT_ID}" \
         -d "parse_mode=Markdown" \
@@ -84,7 +84,7 @@ message_bad:
     - when: on_failure 
   script:
     - |
-      MSG="*охХХХХХХ* Пайплайн проекта ${CI_PROJECT_NAME} УПАД. %0A📊 Статус: failure %0A🔗 [Логи](${CI_PIPELINE_URL})"
+      MSG="*охХХХХХХ* Пайплайн проекта ${CI_PROJECT_NAME} УПАД. %0A Статус: failure %0A [Логи](${CI_PIPELINE_URL})"
       curl --fail -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
         -d "chat_id=${TELEGRAM_CHAT_ID}" \
         -d "parse_mode=Markdown" \
