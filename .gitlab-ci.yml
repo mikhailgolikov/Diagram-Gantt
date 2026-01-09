@@ -40,15 +40,9 @@ lint_job:
     - sleep 5
     - echo "Код в порядке"
 
-deploy_job:
+.logic_deploy:
   extends: .base_template
-  stage: deploy 
-  needs:
-    - job: build_job
-    - job: lint_job
-  environment:
-    name: production 
-    url: http://158.160.8.109
+  stage: deploy
   script:
     - echo "Помчали деплой..."
     - docker compose up -d --build
@@ -61,7 +55,22 @@ deploy_job:
       - deploy_data.txt
     when: always
 
+deploy_to_dev:
+  extends: .logic_deploy
+  environment:
+    name: development 
+    url: http://dev.158.160.8.109
+  rules:
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
 
+deploy_to_prod:
+  extends: .logic_deploy
+  environment:
+    name: production
+    url: http://158.160.8.109
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  
 
 
 message_good:
