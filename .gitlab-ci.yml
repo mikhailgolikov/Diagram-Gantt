@@ -51,7 +51,7 @@ deploy_job:
     url: http://158.160.8.109
   script:
     - echo "Помчали деплой..."
-    - docker compose up -d --build---
+    - docker compose up -d --build
     - echo "Список запущенных контейнеров:"
     - echo "Деплой производится на сервер -  $SERVER_IP"
     - echo "Проверка наличия пароля БД - $DB_PASSWORD"
@@ -71,7 +71,7 @@ message_good:
     - when: on_success
   script:
     - |
-      MSG="*АААААААА* Пайплайн проекта ${CI_PROJECT_NAME}успеХ. %0A Статус: ${CI_JOB_STATUS} %0A Версия: ${CI_COMMIT_SHORT_SHA}"
+      MSG="*Люблю тебя братанчик* Пайплайн проекта ${CI_PROJECT_NAME}успеХ. %0A Статус: ${CI_JOB_STATUS} %0A Версия: ${CI_COMMIT_SHORT_SHA}"
       curl --fail -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
         -d "chat_id=${TELEGRAM_CHAT_ID}" \
         -d "parse_mode=Markdown" \
