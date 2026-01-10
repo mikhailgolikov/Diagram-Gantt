@@ -144,7 +144,7 @@ message_good:
     - when: on_success
   script:
     - |
-      MSG="*Ох че будет 23 и 24 а * Пайплайн проекта ${CI_PROJECT_NAME}успеХ. %0A Статус: ${CI_JOB_STATUS} %0A Версия: ${CI_COMMIT_SHORT_SHA}"
+      MSG="*че братан кто кого перепьет как думаешь?* Пайплайн проекта ${CI_PROJECT_NAME}успеХ. %0A Статус: ${CI_JOB_STATUS} %0A Версия: ${CI_COMMIT_SHORT_SHA}"
       curl --fail -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
         -d "chat_id=${TELEGRAM_CHAT_ID}" \
         -d "parse_mode=Markdown" \
