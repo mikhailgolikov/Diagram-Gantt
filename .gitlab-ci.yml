@@ -27,14 +27,27 @@ build_job:
     - echo "Фиксаируем версии инструментов сборки"
     - docker version > versions.txt
     - docker compose version >> versions.txt
+    - echo "Логи" > temp.log
+    - echo "Конфиги" > config.json
+    
   artifacts:
     paths:
       - versions.txt
-    expire_in: 1 day
+      - config.json
+    exclude:
+      - "*.log"
+    name: "build-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    access: 'developer'
+    expose_as: 'Build version'
+    when: on_success
 
 lint_job:
   extends: .base_template
   stage: test
+  needs: 
+    - job: build_job
+      artifacts: true 
   script:
     - echo "Запускаем проверку кода"
     - sleep 5
@@ -45,8 +58,12 @@ lint_job:
   stage: deploy
   needs:
     - job: build_job 
-    - job: lint_job 
+      artifacts: true
+    - job: lint_job
+      artifacts: false
   script:
+    - echo "Проверим файлы из билда:"
+    - ls -la versions.txt config.json
     - echo "Помчали деплой..."
     - docker compose up -d --build
     - echo "Список запущенных контейнеров:"
