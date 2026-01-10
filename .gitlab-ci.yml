@@ -79,7 +79,7 @@ deploy_to_feature:
   extends: .logic_deploy
   environment:
     name: review/$CI_COMMIT_REF_SLUG 
-    url: http://feature-$CI_COMMIT_REF_SLUG.158.160.8.109 
+    url: http://feature-$CI_COMMIT_REF_SLUG.$IP 
     on_stop: stop_feature 
     auto_stop_in: 1 week  
   rules:
@@ -103,7 +103,7 @@ deploy_to_dev:
   extends: .logic_deploy
   environment:
     name: development 
-    url: http://dev.158.160.8.109
+    url: http://dev.$IP
   rules:
     - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
 
