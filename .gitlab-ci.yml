@@ -3,7 +3,7 @@ stages:
   - test
   - deploy 
   - verify
-  - rollback
+  - rollback 
   - release
   - notification
   - pages
