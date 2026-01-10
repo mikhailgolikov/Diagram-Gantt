@@ -21,6 +21,14 @@ cache:
 build_job:
   extends: .base_template
   stage: build
+  rules:
+    - changes:
+        - docker-compose.yml
+        - .env
+        - .gitlab-ci.yml
+        - src/**/*
+      when: on_success
+    - when: never 
   script:
     - mkdir -p .cache/
     - echo "Фиксаируем версии инструментов сборки"
@@ -29,7 +37,7 @@ build_job:
     - cp .cache/versions.txt versions.txt
     - echo "Логи" > temp.log
     - echo "Конфиги" > config.json
-    
+  
   artifacts:
     paths:
       - versions.txt
@@ -67,7 +75,7 @@ lint_job:
     - echo "Помчали деплой..."
     - docker compose up -d --build
     - echo "Список запущенных контейнеров:"
-    - echo "Деплой производится на сервер -  $_IP"
+    - echo "Деплой производится на сервер -  $IP"
     - echo "Проверка наличия пароля БД - $DB_PASSWORD"
     - docker ps > deploy_data.txt
   artifacts:
@@ -111,9 +119,11 @@ deploy_to_prod:
   extends: .logic_deploy
   environment:
     name: production
-    url: http://158.160.8.109
+    url: http://$IP
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $DB_PASSWORD != null
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $DB_PASSWORD == null
+      when: never
   
 
 
