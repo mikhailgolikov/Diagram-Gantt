@@ -156,13 +156,12 @@ message_bad:
 pages:
   extends: .base_template
   stage: pages
-  image: python:latest
-  before_script:
-    - pip install mkdocs-material 
   script:
-    - mkdocs build --site-dir public 
+    - sudo apt-get update && sudo apt-get install -y python3-pip || echo "Pip already installed or sudo failed"
+    - python3 -m pip install mkdocs-material
+    - python3 -m mkdocs build --site-dir public
   artifacts:
     paths:
-      - public 
+      - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
