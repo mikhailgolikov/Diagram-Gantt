@@ -15,15 +15,14 @@ stages:
 cache:
   key: "$CI_COMMIT_REF_SLUG" 
   paths:
-     - .docker/cache/
-     - .compose-cache/
-     - .ci-cache/
+    - .cache/   
   policy: pull-push
   when: 'always'
 build_job:
   extends: .base_template
   stage: build
   script:
+    - mkdir -p .cache/
     - echo "Фиксаируем версии инструментов сборки"
     - docker version > versions.txt
     - docker compose version >> versions.txt
@@ -49,6 +48,7 @@ lint_job:
       artifacts: true 
   script:
     - echo "Запускаем проверку кода"
+    - ls -la .cache/
     - sleep 5
     - echo "Код в порядке"
 
