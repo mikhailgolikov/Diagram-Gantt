@@ -157,9 +157,7 @@ pages:
   extends: .base_template
   stage: pages
   script:
-    - sudo apt-get update && sudo apt-get install -y python3-pip || echo "Pip already installed or sudo failed"
-    - python3 -m pip install mkdocs-material
-    - python3 -m mkdocs build --site-dir public
+    - mkdocs build --site-dir public
   artifacts:
     paths:
       - public
