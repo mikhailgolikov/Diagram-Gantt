@@ -1,0 +1,4 @@
+site_name: "Документация о пайплайне"
+theme: readthedocs
+nav:
+  - Инструкция: index.md
