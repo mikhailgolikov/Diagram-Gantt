@@ -3,6 +3,7 @@ stages:
   - test
   - deploy 
   - notification
+  - pages
 
 .base_template:
   tags:
@@ -152,3 +153,16 @@ message_bad:
         -d "chat_id=${TELEGRAM_CHAT_ID}" \
         -d "parse_mode=Markdown" \
         -d "text=${MSG}"
+pages:
+  extends: .base_template
+  stage: pages
+  image: python:latest
+  before_script:
+    - pip install mkdocs-material 
+  script:
+    - mkdocs build --site-dir public 
+  artifacts:
+    paths:
+      - public 
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
