@@ -15,11 +15,11 @@ stages:
 cache:
   key: "$CI_COMMIT_REF_SLUG" 
   paths:
-    - frontend/node_modules/
-    - backend/obj/         
-    - backend/bin/
-    - .npm/ 
-
+     - .docker/cache/
+     - .compose-cache/
+     - .ci-cache/
+  policy: pull-push
+  when: 'always'
 build_job:
   extends: .base_template
   stage: build
@@ -41,43 +41,6 @@ build_job:
     access: 'developer'
     expose_as: 'Build version'
     when: on_success
-
-build_job1:
-  extends: .base_template
-  stage: build
-  script:
-    # 1. Посмотрим что есть в проекте
-    - echo "=== СТРУКТУРА ПРОЕКТА ==="
-    - find . -type f -name "*.json" -o -name "*.lock" -o -name "*.yml" -o -name "*.yaml" | head -20
-    - echo ""
-    - echo "=== ПАПКИ ПРОЕКТА ==="
-    - ls -la
-    - echo ""
-    
-    # 2. Ищем зависимости
-    - echo "=== ПОИСК ФАЙЛОВ ЗАВИСИМОСТЕЙ ==="
-    - if [ -f "package.json" ]; then echo "✅ Найден package.json"; cat package.json | head -5; else echo "❌ Нет package.json"; fi
-    - if [ -f "package-lock.json" ]; then echo "✅ Найден package-lock.json"; else echo "❌ Нет package-lock.json"; fi
-    - if [ -f "yarn.lock" ]; then echo "✅ Найден yarn.lock"; else echo "❌ Нет yarn.lock"; fi
-    - if [ -f "requirements.txt" ]; then echo "✅ Найден requirements.txt"; else echo "❌ Нет requirements.txt"; fi
-    - if [ -f "Pipfile" ]; then echo "✅ Найден Pipfile"; else echo "❌ Нет Pipfile"; fi
-    - if [ -f "Gemfile" ]; then echo "✅ Найден Gemfile"; else echo "❌ Нет Gemfile"; fi
-    - echo ""
-    
-    # 3. Ищем папки с зависимостями
-    - echo "=== ПАПКИ С ЗАВИСИМОСТЯМИ ==="
-    - if [ -d "node_modules" ]; then echo "✅ Есть node_modules/"; du -sh node_modules/ 2>/dev/null || echo "   (папка существует)"; else echo "❌ Нет node_modules/"; fi
-    - if [ -d "vendor" ]; then echo "✅ Есть vendor/"; else echo "❌ Нет vendor/"; fi
-    - if [ -d ".venv" ]; then echo "✅ Есть .venv/"; else echo "❌ Нет .venv/"; fi
-    - if [ -d "target" ]; then echo "✅ Есть target/"; else echo "❌ Нет target/"; fi
-    - echo ""
-    
-    # 4. Оригинальный код
-    - echo "Фиксируем версии инструментов сборки"
-    - docker version > versions.txt
-    - docker compose version >> versions.txt
-    - echo "Логи" > temp.log
-    - echo "Конфиги" > config.json
 lint_job:
   extends: .base_template
   stage: test
