@@ -67,7 +67,7 @@ lint_job:
     - echo "Помчали деплой..."
     - docker compose up -d --build
     - echo "Список запущенных контейнеров:"
-    - echo "Деплой производится на сервер -  $SERVER_IP"
+    - echo "Деплой производится на сервер -  $_IP"
     - echo "Проверка наличия пароля БД - $DB_PASSWORD"
     - docker ps > deploy_data.txt
   artifacts:
