@@ -191,7 +191,6 @@ deploy_to_prod:
   
 create_release:
   stage: release
-  image: registry.gitlab.com
   tags:
     - bellinghem
   rules:
