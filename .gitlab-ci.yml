@@ -60,17 +60,16 @@ build_job:
     when: on_success
 
 
-
 frontend_code_quality:
   stage: test
   script:
     - cd Gantt-Chart-Frontend
     - npm install
-    - npx eslint src --format codeclimate -o ../gl-code-quality-report.json || true
+    - npx eslint src --format json -o eslint-report.json || true
   artifacts:
     when: always
     reports:
-      codequality: ../gl-code-quality-report.json
+      codequality: eslint-report.json
 
 
 
