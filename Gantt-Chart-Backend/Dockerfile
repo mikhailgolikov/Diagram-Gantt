@@ -1,13 +1,11 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-COPY ./*.sln ./
-COPY ./Gantt-Chart-Backend/*.csproj ./Gantt-Chart-Backend/
-COPY ./Gantt-Chart-Backend/. ./Gantt-Chart-Backend/
-
+COPY *.sln .
+COPY *.csproj .
 RUN dotnet restore
 
-WORKDIR /app/Gantt-Chart-Backend
+COPY . .
 
 RUN dotnet publish -c Release -o /app/publish
 
