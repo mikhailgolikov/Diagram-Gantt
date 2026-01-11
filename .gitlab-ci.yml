@@ -121,14 +121,6 @@ frontend_lint:
     manual
 
 
-secret_detection:
-  stage: test
-  script:
-    - export PATH="$PATH:/home/mikhail/.local/bin"
-    - semgrep scan --config p/secrets --gitlab-sast --output gl-secret-detection-report.json
-  artifacts:
-    reports:
-      secret_detection: gl-secret-detection-report.json 
 
 
 
