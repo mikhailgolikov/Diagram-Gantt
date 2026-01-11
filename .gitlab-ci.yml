@@ -121,14 +121,7 @@ frontend_lint:
     manual
 
 
-sast_scan:
-  stage: test
-  script:
-    - export PATH="$PATH:/home/mikhail/.local/bin"
-    - semgrep scan --config auto --config .semgrep-dotnet.yaml --gitlab-sast --output gl-sast-report.json
-  artifacts:
-    reports:
-      sast: gl-sast-report.json 
+
 
 
 
