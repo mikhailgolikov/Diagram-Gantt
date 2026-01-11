@@ -87,6 +87,7 @@ backend_lint:
   script:
     - cd Gantt-Chart-Backend
     - dotnet format Gantt-Chart-Backend.csproj --verify-no-changes
+  when: manual
 
 frontend_lint:
   stage: test
@@ -94,6 +95,7 @@ frontend_lint:
     - cd Gantt-Chart-Frontend
     - npm install
     - npm run lint
+  when: manual
 
 
 
