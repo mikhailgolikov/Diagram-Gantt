@@ -75,17 +75,6 @@ frontend_code_quality:
 
 
 
-backend_quality:
-  stage: test
-  script:
-    - cd backend 
-    - dotnet tool install --global dotnet-format || true
-    - export PATH="$PATH:$HOME/.dotnet/tools"
-    - dotnet format --verify-no-changes --report . || true
-  artifacts:
-    when: always
-    paths:
-      - "**/artifacts/format-report.json"
 
 unit_test_backend:
   extends: .base_template
