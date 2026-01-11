@@ -81,6 +81,22 @@ unit_test_frontend:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
 
+
+backend_lint:
+  stage: test
+  script:
+    - cd Gantt-Chart-Backend
+    - dotnet format --verify-no-changes
+
+frontend_lint:
+  stage: test
+  script:
+    - cd Gantt-Chart-Frontend
+    - npm install
+    - npm run lint
+
+
+
 lint_job:
   extends: .base_template
   stage: test
