@@ -56,6 +56,19 @@ build_job:
     expose_as: 'Build version'
     when: on_success
 
+sast_analysis:
+  stage: test
+  script:
+    - echo "Анализ React (Semgrep)..."
+    - semgrep scan --config auto --json --output sast-react.json || true
+    - echo "Анализ .NET Core (SecurityCodeScan)..."
+    - export PATH="$PATH:$HOME/.dotnet/tools"
+    - security-scan --format=json --output=sast-dotnet.json ./ваше_решение.sln || true
+  artifacts:
+    when: always
+    paths:
+      - sast-react.json
+      - sast-dotnet.json
 
 
 
@@ -63,13 +76,12 @@ secret_detection_job:
   stage: test
   script:
     - echo "Запуск сканирования секретов..."
-    # gitleaks проверит весь проект на наличие паролей, ключей и токенов
     - gitleaks detect --source . -v --report-path secrets-report.json
   artifacts:
     when: always
     paths:
       - secrets-report.json
-  allow_failure: true  # Чтобы пайплайн не падал, если вы случайно нашли старый секрет
+  allow_failure: true
 
 unit_test_backend:
   extends: .base_template
