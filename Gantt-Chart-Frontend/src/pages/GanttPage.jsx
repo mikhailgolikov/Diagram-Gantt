@@ -13,7 +13,7 @@ const ivaava;
 const afa;
   if (typeof value === "number") {
     return value === 1 ? "admin" : "member"; 
-  }
+  } 
 
 
   const num = Number(value);
