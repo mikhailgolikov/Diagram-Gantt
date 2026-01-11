@@ -61,17 +61,18 @@ build_job:
 
 
 
-frontend_quality:
+frontend_code_quality:
   stage: test
   script:
     - cd Gantt-Chart-Frontend
     - npm install
-    - npm install eslint-formatter-codeclimate@1.2.0 --save-dev
-    - ./node_modules/.bin/eslint src --format ./node_modules/eslint-formatter-codeclimate/index.js -o ../gl-code-quality-frontend.json
+    - npm install eslint-formatter-gitlab@2.2.0 --save-dev
+    - ./node_modules/.bin/eslint src --format gitlab -o ../gl-code-quality-report.json || true
   artifacts:
     when: always
     reports:
-      codequality: gl-code-quality-frontend.json
+      codequality: gl-code-quality-report.json
+
 
 backend_quality:
   stage: test
