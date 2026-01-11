@@ -1,8 +1,8 @@
 services:
     frontend:
         build:
-          context: .
-          dockerfile: ./Gantt-Chart-Frontend/Dockerfile
+          context: ./Gantt-Chart-Frontend  
+          dockerfile: Dockerfile
         image: tuffyduck/gantt-frontend:latest
         restart: unless-stopped
         depends_on:
@@ -16,8 +16,8 @@ services:
 
     backend:
         build:
-          context: .
-          dockerfile: ./Gantt-Chart-Backend/Dockerfile
+          context:  ./Gantt-Chart-Backend
+          dockerfile: Dockerfile
         image: brvindvnce/gantt-chart-backend:latest
         restart: unless-stopped
         depends_on:
