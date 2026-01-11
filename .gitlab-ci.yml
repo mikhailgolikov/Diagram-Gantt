@@ -5,8 +5,8 @@ stages:
   - verify
   - rollback 
   - release
-  - notification 
   - pages
+  - notification 
 
 .base_template:
   tags:
@@ -129,6 +129,38 @@ deploy_to_prod:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $DB_PASSWORD == null
       when: never
   
+verify_app:
+  extends: .base_template
+  stage:
+    verify
+  script:
+    - sleep 20
+    - curl --fail http://localhost:5000 || exit 1
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+rollback_auto:
+  extends: .base_template
+  stage: rollback
+  script:
+    - echo "Приложение не прошло проверку verify, откатываеим "
+    - docker compose down 
+    - docker compose up -d
+  when: on_failure
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+manual_rollback:
+  extends: .base_template
+  stage: rollback
+  script:
+    - echo "ОТкатываю"
+    - docker compose down
+  when: manual
+  environment:
+    name: production
+    action: rollback
+
 create_release:
   stage: release
   image: registry.gitlab.com
