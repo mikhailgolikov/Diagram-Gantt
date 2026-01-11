@@ -67,6 +67,20 @@ unit_test_backend:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
 
+unit_test_frontend:
+  extends: .base_template
+  stage: test
+  script:
+    - echo "ютестик фор реакт"
+    - cd Gantt-Chart-Frontend
+    - npm install
+    - npm run test
+  rules:
+    - if: $CI_COMMIT_BRANCH == "test"
+      when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+
 lint_job:
   extends: .base_template
   stage: test
