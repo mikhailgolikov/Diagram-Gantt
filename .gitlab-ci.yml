@@ -20,7 +20,7 @@ stages:
 
 cache:
   key: "$CI_COMMIT_REF_SLUG" 
-  paths:
+  paths: 
     - .cache/   
   policy: pull-push
   when: 'always'
