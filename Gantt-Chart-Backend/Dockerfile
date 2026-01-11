@@ -1,15 +1,13 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
-
-COPY *.csproj .
-RUN dotnet restore
-
 COPY . .
 
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet restore "Gantt-Chart-Backend.csproj"
+RUN dotnet publish "Gantt-Chart-Backend.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
+
 
 RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 USER appuser
