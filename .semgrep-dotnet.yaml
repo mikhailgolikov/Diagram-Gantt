@@ -1,0 +1,12 @@
+rules:
+  - id: dotnet-jwt-no-validation
+    patterns:
+      - pattern: |
+          new TokenValidationParameters {
+            ...,
+            ValidateIssuer = false,
+            ...
+          }
+    message: "валидация татмаоока"
+    languages: [csharp]
+    severity: ERROR
