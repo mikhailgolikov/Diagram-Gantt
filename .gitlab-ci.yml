@@ -29,7 +29,7 @@ build_job:
     - changes:
         - docker-compose.yml
         - .env
-        - .gitlab-ci.yml
+        - .gitlab-ci.yml 
         - src/**/*
       when: on_success
     - when: never 
