@@ -132,9 +132,6 @@ frontend_lint:
   needs:
     - job: build_job 
       artifacts: true
-    - job: frontend_lint
-    - job: backend_lint
-      artifacts: false
   script:
     - echo "Проверим файлы из билда:"
     - ls -la versions.txt config.json
