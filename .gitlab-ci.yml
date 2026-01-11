@@ -222,31 +222,6 @@ manual_rollback:
 
 
 
-message_good:
-  extends: .base_template
-  stage: notification 
-  rules:
-    - when: on_success
-  script:
-    - |
-      MSG="*че братан кто кого перепьет как думаешь?* Пайплайн проекта ${CI_PROJECT_NAME}успеХ. %0A Статус: ${CI_JOB_STATUS} %0A Версия: ${CI_COMMIT_SHORT_SHA}"
-      curl --fail -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-        -d "chat_id=${TELEGRAM_CHAT_ID}" \
-        -d "parse_mode=Markdown" \
-        -d "text=${MSG}"
-
-message_bad:
-  extends: .base_template
-  stage: notification
-  rules:
-    - when: on_failure 
-  script:
-    - |
-      MSG="*охХХХХХХ* Пайплайн проекта ${CI_PROJECT_NAME} УПАД. %0A Статус: failure %0A [Логи](${CI_PIPELINE_URL})"
-      curl --fail -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-        -d "chat_id=${TELEGRAM_CHAT_ID}" \
-        -d "parse_mode=Markdown" \
-        -d "text=${MSG}"
 pages:
   extends: .base_template
   stage: pages
