@@ -5,7 +5,7 @@ stages:
   - verify
   - rollback 
   - release
-  - notification
+  - notification 
   - pages
 
 .base_template:
