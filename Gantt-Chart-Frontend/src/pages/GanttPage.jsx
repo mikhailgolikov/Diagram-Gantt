@@ -9,7 +9,7 @@ const normalizeRole = (value) => {
   if (value === null || value === undefined) {
     return "member";
   }
-
+const ivaava;
 
   if (typeof value === "number") {
     return value === 1 ? "admin" : "member"; 
