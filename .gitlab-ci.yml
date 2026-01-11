@@ -38,7 +38,7 @@ build_job:
         - src/**/*
       when: on_success
     - when: never 
-  script:
+  script: 
     - mkdir -p .cache/
     - echo "Фиксаируем версии инструментов сборки"
     - docker version > .cache/versions.txt
