@@ -276,13 +276,14 @@ release_job:
   script:
     - echo "1. Генерация Release Notes..."
     - git log --oneline -n 10 > release_notes.txt
-    - echo "2. Сохранение в репозиторий..."
     - cp release_notes.txt CHANGELOG.md
-    - echo "3. Создание релиза в интерфейсе GitLab..."
+    
+    - echo "3. Создание релиза..."
     - release-cli create --name "Release $CI_COMMIT_SHORT_SHA" --description "$(cat release_notes.txt)" --tag-name "v1.0.$CI_PIPELINE_IID"
   artifacts:
     paths:
       - CHANGELOG.md
+
 
 
 message_good:
