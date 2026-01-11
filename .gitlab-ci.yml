@@ -227,7 +227,7 @@ pages:
   script:
     - mkdocs build --site-dir public
   artifacts:
-    paths:
+    paths: 
       - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
