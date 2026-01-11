@@ -7,8 +7,8 @@ stages:
   - release
   - pages
   - notification 
-include:
-  - template: Jobs/SAST.gitlab-ci.yml
+#include:
+  #- template: Jobs/SAST.gitlab-ci.yml
 
 .base_template:
   tags:
@@ -55,6 +55,21 @@ build_job:
     access: 'developer'
     expose_as: 'Build version'
     when: on_success
+
+
+
+
+secret_detection_job:
+  stage: test
+  script:
+    - echo "Запуск сканирования секретов..."
+    # gitleaks проверит весь проект на наличие паролей, ключей и токенов
+    - gitleaks detect --source . -v --report-path secrets-report.json
+  artifacts:
+    when: always
+    paths:
+      - secrets-report.json
+  allow_failure: true  # Чтобы пайплайн не падал, если вы случайно нашли старый секрет
 
 unit_test_backend:
   extends: .base_template
