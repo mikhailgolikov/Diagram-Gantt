@@ -60,7 +60,7 @@ unit_test_backend:
   script:
   - echo "Запускаем  xUnit тесты  для асп дот нет"
   - cd Gantt-Chart-Backend
-  - dotnet test --no-restore --verbosity normal
+  - dotnet test Gantt-Chart-Backend.csproj --verbosity normal
   rules:
     - if: $CI_COMMIT_BRANCH == "test"
       when: always
