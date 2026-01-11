@@ -56,6 +56,31 @@ build_job:
     expose_as: 'Build version'
     when: on_success
 
+code_quality_job:
+  stage: test
+  script:
+    - echo "Настройка временного конфига ESLint..."
+    - |
+      echo '{
+        "env": { "browser": true, "es2021": true },
+        "extends": ["eslint:recommended", "plugin:react/recommended"],
+        "parserOptions": { "ecmaFeatures": { "jsx": true }, "ecmaVersion": "latest", "sourceType": "module" },
+        "plugins": ["react"],
+        "rules": { "no-unused-vars": "warn" },
+        "settings": { "react": { "version": "detect" } }
+      }' > .eslintrc.json
+    
+    - echo "Запуск анализа качества кода..."
+    - eslint . --ext .js,.jsx,.ts,.tsx --format gitlab > gl-code-quality-report.json || true
+    
+  artifacts:
+    reports:
+      codequality: gl-code-quality-report.json
+    paths:
+      - gl-code-quality-report.json
+
+
+
 sast_analysis:
   stage: test
   script:
