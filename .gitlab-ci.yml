@@ -73,8 +73,6 @@ unit_test_backend:
   rules:
     - if: $CI_COMMIT_BRANCH == "test"
       when: always
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: always
 
 unit_test_frontend:
   extends: .base_template
@@ -86,8 +84,6 @@ unit_test_frontend:
     - npx vitest run
   rules:
     - if: $CI_COMMIT_BRANCH == "test"
-      when: always
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
 
 backend_lint:
