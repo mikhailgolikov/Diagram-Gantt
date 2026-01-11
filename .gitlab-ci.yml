@@ -61,7 +61,27 @@ build_job:
 
 
 
+frontend_quality:
+  stage: test
+  script:
+    - cd Gantt-Chart-Frontend
+    - npm install
+    - npm install eslint-formatter-gitlab --save-dev
+    - npx eslint src --format gitlab -o ../gl-code-quality-frontend.json
+  artifacts:
+    when: always
+    reports:
+      codequality: gl-code-quality-frontend.json
 
+backend_quality:
+  stage: test
+  before_script:
+    - dotnet tool install --global dotnet-sonarscanner
+    - export PATH="$PATH:$HOME/.dotnet/tools"
+  script:
+    - cd Gantt-Chart-Backend 
+    - dotnet format --verify-no-changes --report . 
+  allow_failure: true 
 
 unit_test_backend:
   extends: .base_template
