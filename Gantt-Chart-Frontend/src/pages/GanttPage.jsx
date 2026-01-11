@@ -10,7 +10,7 @@ const normalizeRole = (value) => {
     return "member";
   }
 const ivaava;
-
+const afa;
   if (typeof value === "number") {
     return value === 1 ? "admin" : "member"; 
   }
