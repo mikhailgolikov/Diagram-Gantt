@@ -53,6 +53,20 @@ build_job:
     access: 'developer'
     expose_as: 'Build version'
     when: on_success
+
+unit_test_backend:
+  extends: .base_tamplate
+  stage: test
+  script:
+  - echo "Запускаем  xUnit тесты  для асп дот нет"
+  - cd Gantt-Chart-Backend
+  - dotnet test --no-restore --verbosity normal
+  rules:
+    - if: $CI_COMMIT_BRANCH == "test"
+      when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+
 lint_job:
   extends: .base_template
   stage: test
