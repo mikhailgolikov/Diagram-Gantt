@@ -135,7 +135,7 @@ verify_app:
     verify
   script:
     - sleep 20
-    - curl --fail http://localhost:5000 || exit 1
+    - curl --fail http://158.160.8.109/login || exit 1
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
