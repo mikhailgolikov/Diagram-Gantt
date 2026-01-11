@@ -66,8 +66,8 @@ frontend_quality:
   script:
     - cd Gantt-Chart-Frontend
     - npm install
-    - npm install eslint-formatter-gitlab --save-dev
-    - npx eslint src --format gitlab -o ../gl-code-quality-frontend.json
+    - npm install eslint-formatter-codeclimate@1.2.0 --save-dev
+    - ./node_modules/.bin/eslint src --format ./node_modules/eslint-formatter-codeclimate/index.js -o ../gl-code-quality-frontend.json
   artifacts:
     when: always
     reports:
