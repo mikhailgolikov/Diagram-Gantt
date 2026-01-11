@@ -196,12 +196,14 @@ create_release:
   rules:
     - if: $CI_COMMIT_TAG     
   script:
-    - echo "СОЗДАЕМ РЕЛИЗ ТЕГ -  $CI_COMMIT_TAG"
-  release:
-    name: 'Release $CI_COMMIT_TAG'
-    description: 'коммит -  $CI_COMMIT_SHA'
-    tag_name: '$CI_COMMIT_TAG'
-    ref: '$CI_COMMIT_SHA'
+    - |
+      echo "Создаем официальный релиз для тега: $CI_COMMIT_TAG"
+      curl --request POST \
+        --header "JOB-TOKEN: $CI_JOB_TOKEN" \
+        --data "name=Release $CI_COMMIT_TAG" \
+        --data "tag_name=$CI_COMMIT_TAG" \
+        --data "description=релиз. Коммит: $CI_COMMIT_SHA" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases"
 
 
 
