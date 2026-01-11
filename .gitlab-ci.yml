@@ -6,8 +6,9 @@ stages:
   - rollback 
   - pages 
   - notification 
-#include:
-  #- template: Jobs/SAST.gitlab-ci.yml
+
+include:
+  - local: 'notifications.yml'
 
 .base_template:
   tags:
