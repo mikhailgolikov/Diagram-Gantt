@@ -194,10 +194,9 @@ create_release:
   tags:
     - bellinghem
   rules:
-    - if: $CI_COMMIT_TAG     
+    - if: $CI_COMMIT_TAG   
   script:
     - |
-      echo "Создаем официальный релиз для тега: $CI_COMMIT_TAG"
       curl --request POST \
         --header "JOB-TOKEN: $CI_JOB_TOKEN" \
         --data "name=Release $CI_COMMIT_TAG" \
@@ -205,17 +204,17 @@ create_release:
         --data "description=релиз. Коммит: $CI_COMMIT_SHA" \
         "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases"
 
-
-
 verify_app:
   extends: .base_template
-  stage:
-    verify
+  stage: verify
   script:
     - sleep 20
     - curl --fail http://158.160.8.109/login || exit 1
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH 
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH 
+      when: on_success 
+
 
 rollback_auto:
   extends: .base_template
