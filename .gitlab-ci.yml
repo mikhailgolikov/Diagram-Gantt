@@ -159,7 +159,6 @@ manual_rollback:
   when: manual
   environment:
     name: production
-    action: rollback
 
 create_release:
   stage: release
