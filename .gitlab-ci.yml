@@ -55,7 +55,7 @@ build_job:
     when: on_success
 
 unit_test_backend:
-  extends: .base_tamplate
+  extends: .base_template
   stage: test
   script:
   - echo "Запускаем  xUnit тесты  для асп дот нет"
