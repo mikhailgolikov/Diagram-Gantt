@@ -66,12 +66,13 @@ frontend_code_quality:
   script:
     - cd Gantt-Chart-Frontend
     - npm install
-    - npm install eslint-formatter-gitlab@2.2.0 --save-dev
+    - npm install eslint-formatter-gitlab@2.2.0 --save-dev --legacy-peer-deps
     - ./node_modules/.bin/eslint src --format gitlab -o ../gl-code-quality-report.json || true
   artifacts:
     when: always
     reports:
       codequality: gl-code-quality-report.json
+
 
 
 backend_quality:
