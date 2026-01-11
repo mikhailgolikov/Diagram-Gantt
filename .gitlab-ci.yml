@@ -4,7 +4,6 @@ stages:
   - deploy 
   - verify
   - rollback 
-  - release
   - pages
   - notification 
 #include:
@@ -24,6 +23,10 @@ cache:
     - .cache/   
   policy: pull-push
   when: 'always'
+
+
+
+
 build_job:
   extends: .base_template
   stage: build
@@ -56,57 +59,9 @@ build_job:
     expose_as: 'Build version'
     when: on_success
 
-code_quality_job:
-  stage: test
-  script:
-    - echo "Настройка временного конфига ESLint..."
-    - |
-      echo '{
-        "env": { "browser": true, "es2021": true },
-        "extends": ["eslint:recommended", "plugin:react/recommended"],
-        "parserOptions": { "ecmaFeatures": { "jsx": true }, "ecmaVersion": "latest", "sourceType": "module" },
-        "plugins": ["react"],
-        "rules": { "no-unused-vars": "warn" },
-        "settings": { "react": { "version": "detect" } }
-      }' > .eslintrc.json
-    
-    - echo "Запуск анализа качества кода..."
-    - eslint . --ext .js,.jsx,.ts,.tsx --format gitlab > gl-code-quality-report.json || true
-    
-  artifacts:
-    reports:
-      codequality: gl-code-quality-report.json
-    paths:
-      - gl-code-quality-report.json
 
 
 
-sast_analysis:
-  stage: test
-  script:
-    - echo "Анализ React (Semgrep)..."
-    - semgrep scan --config auto --json --output sast-react.json || true
-    - echo "Анализ .NET Core (SecurityCodeScan)..."
-    - export PATH="$PATH:$HOME/.dotnet/tools"
-    - security-scan --format=json --output=sast-dotnet.json ./ваше_решение.sln || true
-  artifacts:
-    when: always
-    paths:
-      - sast-react.json
-      - sast-dotnet.json
-
-
-
-secret_detection_job:
-  stage: test
-  script:
-    - echo "Запуск сканирования секретов..."
-    - gitleaks detect --source . -v --report-path secrets-report.json
-  artifacts:
-    when: always
-    paths:
-      - secrets-report.json
-  allow_failure: true
 
 unit_test_backend:
   extends: .base_template
@@ -135,9 +90,11 @@ unit_test_frontend:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
 
-
 backend_lint:
   stage: test
+  needs: 
+    - job: build_job
+      artifacts: true 
   script:
     - cd Gantt-Chart-Backend
     - dotnet format Gantt-Chart-Backend.csproj --verify-no-changes
@@ -145,6 +102,9 @@ backend_lint:
 
 frontend_lint:
   stage: test
+  needs: 
+    - job: build_job
+      artifacts: true 
   script:
     - cd Gantt-Chart-Frontend
     - npm install
@@ -153,17 +113,8 @@ frontend_lint:
 
 
 
-lint_job:
-  extends: .base_template
-  stage: test
-  needs: 
-    - job: build_job
-      artifacts: true 
-  script:
-    - echo "Запускаем проверку кода"
-    - ls -la .cache/
-    - sleep 5
-    - echo "Код в порядке"
+
+
 
 .logic_deploy:
   extends: .base_template
@@ -171,7 +122,8 @@ lint_job:
   needs:
     - job: build_job 
       artifacts: true
-    - job: lint_job
+    - job: frontend_lint
+    - job: backend_lint
       artifacts: false
   script:
     - echo "Проверим файлы из билда:"
@@ -260,29 +212,6 @@ manual_rollback:
   environment:
     name: production
 
-create_release:
-  stage: release
-  image: registry.gitlab.com
-  script:
-    - echo "Создаем релиз для тега такого  $CI_COMMIT_TAG"
-  rules:
-    - if: '$CI_COMMIT_TAG' 
-
-
-release_job:
-  stage: release
-  only:
-    - master
-  script:
-    - echo "1. Генерация Release Notes..."
-    - git log --oneline -n 10 > release_notes.txt
-    - cp release_notes.txt CHANGELOG.md
-    
-    - echo "3. Создание релиза..."
-    - release-cli create --name "Release $CI_COMMIT_SHORT_SHA" --description "$(cat release_notes.txt)" --tag-name "v1.0.$CI_PIPELINE_IID"
-  artifacts:
-    paths:
-      - CHANGELOG.md
 
 
 
