@@ -1,7 +1,8 @@
 stages: 
   - build   
   - test
-  - deploy  
+  - deploy
+  - release  
   - verify
   - rollback 
   - pages 
@@ -188,6 +189,23 @@ deploy_to_prod:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $DB_PASSWORD == null
       when: never
   
+create_release:
+  stage: release
+  image: registry.gitlab.com
+  tags:
+    - bellinghem
+  rules:
+    - if: $CI_COMMIT_TAG     
+  script:
+    - echo "СОЗДАЕМ РЕЛИЗ ТЕГ -  $CI_COMMIT_TAG"
+  release:
+    name: 'Release $CI_COMMIT_TAG'
+    description: 'коммит -  $CI_COMMIT_SHA'
+    tag_name: '$CI_COMMIT_TAG'
+    ref: '$CI_COMMIT_SHA'
+
+
+
 verify_app:
   extends: .base_template
   stage:
