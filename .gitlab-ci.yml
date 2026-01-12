@@ -33,6 +33,11 @@ build_job:
   extends: .base_template
   stage: build
   rules:
+    - changes:
+        - Gantt-Chart-Backend/**/*  
+        - Gantt-Chart-Frontend/**/*  
+        - docker-compose.yml        
+        - .gitlab-ci.yml    
     - when: on_success
   script: 
     - mkdir -p .cache/
