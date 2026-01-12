@@ -189,15 +189,21 @@ deploy_to_prod:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $DB_PASSWORD == null
       when: never
   
-create_release:
+create_release_pro:
   stage: release
+  image: registry.gitlab.com/gitlab-org/cli:latest
+  variables:
+    GITLAB_HOST: gitlab.kupriyanov.space
   tags:
-    - bellinghem
+    - guller
   rules:
     - if: $CI_COMMIT_TAG
+  before_script:
+    - glab auth login --hostname $GITLAB_HOST --token $CI_JOB_TOKEN
   script:
-    - echo "🎉 Тег $CI_COMMIT_TAG создан! Пропускаем создание релиза через API (требуется настройка токена)"
-  allow_failure: true  
+    - |
+      echo "Создание релиза для $CI_COMMIT_TAG"
+ 
 
 verify_app:
   extends: .base_template
