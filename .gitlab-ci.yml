@@ -62,16 +62,22 @@ build_job:
     when: on_success
 
 
-frontend_code_quality:
+code_quality_backend:
   stage: test
+  image: mcr.microsoft.com/dotnet/sdk:9.0
+  tags:
+    - guller
   script:
-    - cd Gantt-Chart-Frontend
-    - npm install
-    - npx eslint src --format json -o eslint-report.json || true
+    - cd Gantt-Chart-Backend
+    - echo "проверяем $PWD"
+    - dotnet format Gantt-Chart-Backend.csproj --report ./ 
+    - mv format-report.json gl-code-quality-report-back.json
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   artifacts:
     when: always
     reports:
-      codequality: eslint-report.json
+      codequality: gl-code-quality-report-back.json
 
 
 
