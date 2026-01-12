@@ -33,13 +33,7 @@ build_job:
   extends: .base_template
   stage: build
   rules:
-    - changes:
-        - docker-compose.yml
-        - .env
-        - .gitlab-ci.yml 
-        - src/**/*
-      when: on_success
-    - when: never 
+    - when: on_success
   script: 
     - mkdir -p .cache/
     - echo "Фиксаируем версии инструментов сборки"
