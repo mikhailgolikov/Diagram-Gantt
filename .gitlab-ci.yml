@@ -19,7 +19,7 @@ include:
     max: 2
     when: runner_system_failure
 
-cache:
+cache: 
   key: "$CI_COMMIT_REF_SLUG" 
   paths: 
     - .cache/   
